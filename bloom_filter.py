@@ -27,6 +27,3 @@ class BloomFilter:
             self.add(seq[i:i+self.k])
 
 
-
-bf = BloomFilter(1000, 5, 21)
-positions = bf._positions("ACGTACGTACGTACGTACGTA")
