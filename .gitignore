@@ -1,0 +1,9 @@
+data/
+*.fa
+*.fasta
+*.fna
+*.gz
+*.pkl
+*.dumped
+__pycache__/
+.venv/
