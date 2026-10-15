@@ -1,5 +1,4 @@
 from pydivsufsort import divsufsort
-import io_utils
 
 ALPHABET = "$ACGT"
 
@@ -45,16 +44,15 @@ class FMIndex:
         """
         top = 0
         bottom = len(self.bwt) - 1
-        for c in reversed(pattern):
-            top = self.first_occurrence[c] + self.occ[c][top]
-            bottom = self.first_occurrence[c] + self.occ[c][bottom + 1] - 1
+        for letter in reversed(pattern):
+            top = self.first_occurrence[letter] + self.occ[letter][top]
+            bottom = self.first_occurrence[letter] + self.occ[letter][bottom + 1] - 1
             if top > bottom:
                 return None
         return (top, bottom)
 
 
 if __name__ == "__main__":
-    ### En attendant d'avoir io_utils
     s = 'ACAACG$'
     sa = divsufsort(s)
     test = FMIndex(s, sa)
@@ -64,6 +62,3 @@ if __name__ == "__main__":
 
     for motif in ["AC", "CA", "GG", "ACAACG", "T", ""]:
         print(motif, test.backward_search(motif))
-
-
-    #source ~/envs/alg_projet/Scripts/activate
