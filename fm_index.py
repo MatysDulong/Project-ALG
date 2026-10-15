@@ -5,35 +5,19 @@ ALPHABET = "$ACGT"
 
 
 class FMIndex:
-    """FM-index d'un texte terminé par '$' (sans suffix array conservé).
-
-    Attributs :
-        bwt (str) : transformée de Burrows-Wheeler du texte.
-        occ (dict[str, list[int]]) : occ[lettre][i] = nombre de lettre
-            dans bwt[0:i] (structure Rank), len(bwt) + 1 cases par lettre.
-        first_occurrence (dict[str, int]) : N[lettre] = nombre de lettres
-            strictement plus petites dans le texte (structure Count).
-    """
+    """FM-index d'un texte terminé par '$' : BWT, Count (N) et Rank (occ)."""
 
     def __init__(self, text, suffix_array):
-        """Construit la BWT, N (Count) et occ (Rank) du texte.
+        """Construit l'index à partir du texte et de son suffix array.
 
-        Args:
-            text (str) : texte terminé par '$', sur l'alphabet ALPHABET.
-            suffix_array : suffix array de text (calculé par l'appelant).
-
-        Ni text ni suffix_array ne sont conservés : ils ne partent donc
-        pas dans le fichier sérialisé.
+        Ni le texte ni le suffix array ne sont conservés.
         """
         self.bwt = "".join(text[i - 1] for i in suffix_array)
         self.occ, letter_counts = self.compute_occ()
         self.first_occurrence = self.compute_first_occurrence(letter_counts)
 
     def compute_first_occurrence(self, counts):
-        """Renvoie N : N[lettre] = nombre de lettres strictement plus petites.
-
-        C'est aussi la ligne de F où apparaît la première occurrence de lettre.
-        """
+        """Renvoie N : N[lettre] = nombre de lettres plus petites."""
         first_occurrence = {}
         total = 0
         for letter in ALPHABET:
@@ -42,11 +26,9 @@ class FMIndex:
         return first_occurrence
 
     def compute_occ(self):
-        """Renvoie (occ, counts) en un seul passage sur la BWT.
+        """Renvoie (occ, counts) : occ[lettre][i] = nb de lettre dans bwt[0:i].
 
-        occ[lettre][i] est le nombre de lettre dans bwt[0:i], c'est-à-dire
-        strictement avant la ligne i ; chaque liste a len(bwt) + 1 cases.
-        counts[lettre] est le nombre total de cette lettre dans la BWT.
+        counts[lettre] est le nombre total de lettre dans la BWT.
         """
         occ = {letter: [0] for letter in ALPHABET}
         counts = {letter: 0 for letter in ALPHABET}
@@ -57,16 +39,9 @@ class FMIndex:
         return occ, counts
 
     def backward_search(self, pattern):
-        """Cherche pattern par backward search, en O(len(pattern)).
+        """Renvoie (top, bottom) : lignes dont le suffixe commence par pattern.
 
-        Args:
-            pattern (str) : motif à chercher, sur l'alphabet ALPHABET.
-
-        Returns:
-            tuple[int, int] | None : intervalle (top, bottom), bornes
-            incluses, des lignes de la BWT dont le suffixe commence par
-            pattern ; None si pattern est absent. Le motif vide renvoie
-            toutes les lignes, (0, len(bwt) - 1).
+        Renvoie None si pattern est absent. Complexité : O(len(pattern)).
         """
         top = 0
         bottom = len(self.bwt) - 1
