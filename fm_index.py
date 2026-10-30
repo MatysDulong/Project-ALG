@@ -46,7 +46,8 @@ class FMIndex:
         bottom = len(self.bwt) - 1
         for letter in reversed(pattern):
             top = self.first_occurrence[letter] + self.occ[letter][top]
-            bottom = self.first_occurrence[letter] + self.occ[letter][bottom + 1] - 1
+            bottom = (self.first_occurrence[letter]
+                      + self.occ[letter][bottom + 1] - 1)
             if top > bottom:
                 return None
         return (top, bottom)

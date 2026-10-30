@@ -42,12 +42,11 @@ class BloomFMIndex:
 
         # Même texte que l'approche 1 : chaque contig terminé par '$'.
         text = "".join(contig + "$" for contig in contigs)
-        fm_index = FMIndex(text, divsufsort(text))
+        fm_index = FMIndex(text, divsufsort(text.encode()))
 
         # Ajouts groupés en dernier pour garder les deux listes alignées.
         self.bloom_filters.append(bloom_filter)
         self.fm_indexes.append(fm_index)
-
 
     def query(self, sequence):
         """Indique dans quels génomes la séquence apparaît en entier.
