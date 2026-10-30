@@ -199,7 +199,7 @@ sont sautés si `data/` est absent.
    [tectonic](https://tectonic-typesetting.github.io)
    (`tectonic report/rapport.tex`).
 
-Machine utilisée : Linux, 8 cœurs, 7,6 Go de RAM, Python 3.12.16. Les temps
+Machine utilisée : Linux, 8 cœurs, 8 Go de RAM, Python 3.12.16. Les temps
 absolus dépendent de la machine et de sa charge ; ce sont les comparaisons
 entre approches qui comptent.
 
